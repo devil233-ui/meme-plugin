@@ -16,6 +16,12 @@ export default [
     bottomHelpMessage: '是否开启头像缓存'
   },
   {
+    field: 'meme.priority',
+    label: '优先级',
+    component: 'InputNumber',
+    bottomHelpMessage: '表情合成优先级'
+  },
+  {
     field: 'meme.reply',
     label: '引用回复',
     component: 'Switch',

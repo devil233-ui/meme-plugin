@@ -4,6 +4,9 @@ enable: true
 # 是否强制使用#触发
 forceSharp: false
 
+# 表情合成优先级
+priority: 1000
+
 # 头像缓存
 cache: true
 

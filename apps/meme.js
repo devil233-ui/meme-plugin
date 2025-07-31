@@ -34,7 +34,7 @@ export class meme extends plugin {
     super({
       name: '清语表情:表情包生成',
       event: 'message',
-      priority: -Infinity,
+      priority: Config.meme.priority,
       rule: []
     })
 
