@@ -1,7 +1,5 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
-import axios from 'axios'
 import chalk from 'chalk'
 
 import { Version  } from '#components'
@@ -9,17 +7,6 @@ import { Utils } from '#models'
 
 const startTime = Date.now()
 let apps
-
-let responseData = '加载失败'
-try {
-  const response = await axios.get(
-    `https://api.wuliya.cn/api/count?name=${Version.Plugin_Name}&type=json`,
-    { timeout: 500 }
-  )
-  responseData = response.data.data
-} catch (error) {
-  logger.warn('⚠️ 访问统计数据失败，超时或网络错误')
-}
 
 try {
   await Utils.Tools.init()
@@ -92,10 +79,7 @@ try {
     chalk.bold.white(`${Version.Bot_Name}`) +
     chalk.gray(' | ') +
     chalk.bold.green('🏷️ 运行版本: ') +
-    chalk.bold.white(`${Version.Bot_Version}`) +
-    chalk.gray(' | ') +
-    chalk.bold.yellow('📊 运行插件总访问/运行次数: ') +
-    chalk.bold.cyan(responseData)
+    chalk.bold.white(`${Version.Bot_Version}`)
   )
 
   logger.info(
@@ -104,7 +88,6 @@ try {
     chalk.rgb(255, 215, 0).bold(' 载入成功 ^_^')
   )
   logger.info(loadTimeColor(`⏱️ 载入耗时：${loadTime} ms`))
-  logger.info(chalk.cyan.bold('💬 雾里的小窝: 272040396'))
   logger.info(chalk.green.bold('========================='))
 
 } catch (error) {
