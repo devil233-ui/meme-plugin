@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+
 import chalk from 'chalk'
 
 import { Version  } from '#components'
@@ -9,7 +10,7 @@ const startTime = Date.now()
 let apps
 
 try {
-  await Utils.Tools.init()
+  Utils.Tools.init()
   logger.info(chalk.bold.cyan(`[${Version.Plugin_AliasName}] 🎉 表情包数据初始化成功！`))
 } catch (error) {
   logger.error(chalk.bold.red(`[${Version.Plugin_AliasName}] 💥 表情包数据初始化失败！错误详情：${error.message}`))
