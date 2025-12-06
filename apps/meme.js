@@ -30,7 +30,7 @@ const initRegExp = async () => {
 await initRegExp()
 
 export class meme extends plugin {
-  constructor() {
+  constructor () {
     super({
       name: '清语表情:表情包生成',
       event: 'message',
@@ -53,7 +53,7 @@ export class meme extends plugin {
   /**
    * 更新正则
    */
-  async updateRegExp() {
+  async updateRegExp () {
     // 等待正则表达式完成解析
     memeRegExp = await createRegex(() => Utils.Tools.getAllKeyWords('meme'))
     presetRegExp = await createRegex(() => Utils.Tools.getAllKeyWords('preset'))
@@ -72,12 +72,18 @@ export class meme extends plugin {
     return true
   }
 
-  async meme(e) {
+  async meme (e) {
+    if (e.bot.adapter.id === 'QQ') {
+      e.group_id.setReaction(e.seq, 66)
+    }
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(e, memeRegExp, Utils.Tools.getKey)
   }
 
-  async preset(e) {
+  async preset (e) {
+    if (e.bot.adapter.id === 'QQ') {
+      e.group_id.setReaction(e.seq, 66)
+    }
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(
       e,
@@ -91,7 +97,7 @@ export class meme extends plugin {
   /**
    * 通用处理函数, 用于验证权限获取需要的参数之类的
    */
-  async validatePrepareMeme(
+  async validatePrepareMeme (
     e,
     regExp,
     getKeyFunc,
@@ -148,7 +154,7 @@ export class meme extends plugin {
   /**
    * 用户权限检查
    */
-  checkUserAccess(userId) {
+  checkUserAccess (userId) {
     if (!Config.access.enable) return true
 
     if (
@@ -167,7 +173,7 @@ export class meme extends plugin {
   /**
    * 调用 Meme 生成方法
    */
-  async makeMeme(e, memeKey, params, userText, isPreset, extraData) {
+  async makeMeme (e, memeKey, params, userText, isPreset, extraData) {
     try {
       const result = await Meme.make(
         e,

@@ -7,7 +7,7 @@ import { Config } from '#components'
   try {
     dailyNoteByWidget = (await import('../../earth-k-plugin/apps/emoticon.js')).dailyNoteByWidget
   } catch (error) {
-    logger.warn(chalk.cyan('[清语表情] 土块插件未加载，跳过劫持'))
+    // logger.warn(chalk.cyan('[清语表情] 土块插件未加载，跳过劫持'))
     return
   }
 
