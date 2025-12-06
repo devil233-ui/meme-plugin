@@ -73,17 +73,13 @@ export class meme extends plugin {
   }
 
   async meme (e) {
-    if (e.bot.adapter.id === 'QQ') {
-      e.group_id.setReaction(e.seq, 66)
-    }
+    e.group.setReaction?.(e.seq, 66)
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(e, memeRegExp, Utils.Tools.getKey)
   }
 
   async preset (e) {
-    if (e.bot.adapter.id === 'QQ') {
-      e.group_id.setReaction(e.seq, 66)
-    }
+    e.group.setReaction?.(e.seq, 66)
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(
       e,
