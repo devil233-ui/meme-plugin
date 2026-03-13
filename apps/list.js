@@ -1,12 +1,6 @@
 import { Config, Render, Version } from '#components'
 import { Utils } from '#models'
 
-let memeListCache = {
-  memeList: null,
-  img: null,
-  memeCount: null
-}
-
 export class list extends plugin {
   constructor () {
     super({
@@ -25,16 +19,7 @@ export class list extends plugin {
   async list (e) {
     if (!Config.meme.enable) return false
     try {
-      // 获取最新的表情包键列表
       const keys = await Utils.Tools.getAllKeys()
-      // 计算最新的表情包数量
-      const currentMemeCount = keys ? keys.length : 0
-
-      // 检查缓存是否有效
-      if (memeListCache.memeList && memeListCache.img && memeListCache.memeCount === currentMemeCount) {
-        await e.reply(memeListCache.img)
-        return true
-      }
 
       if (!keys || keys.length === 0) {
         await e.reply(`[${Version.Plugin_AliasName}]没有找到表情列表, 请使用[#清语表情更新资源], 稍后再试`, true)
@@ -53,10 +38,13 @@ export class list extends plugin {
         if (args_type !== null) types.push('arg')
 
         if (keyWords) {
-          return keyWords.map(keyword => ({
-            name: keyword,
+          // === 修改部分开始 ===
+          // 将多个关键词合并为一个显示项，用斜杠连接
+          return [{
+            name: keyWords.join(' / '),  // 用 / 连接所有关键词
             types
-          }))
+          }]
+          // === 修改部分结束 ===
         }
 
         return []
@@ -72,14 +60,6 @@ export class list extends plugin {
           total
         }
       )
-
-      // 更新缓存
-      memeListCache = {
-        memeList,
-        img,
-        memeCount: currentMemeCount
-      }
-
       await e.reply(img)
       return true
     } catch (error) {

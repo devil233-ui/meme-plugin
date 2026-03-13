@@ -25,29 +25,58 @@ export class search extends plugin {
         return true
       }
 
-      const allKeywords = await Utils.Tools.getAllKeyWords()
+      // === 修改部分开始 ===
+      // 1. 获取所有 key 及其对应的 keywords
+      const allKeys = await Utils.Tools.getAllKeys()
+      const keyToKeywordsMap = new Map()
 
-      if (!allKeywords || allKeywords.length === 0) {
-        await e.reply('表情数据未加载，请稍后重试', true)
-        return true
+      for (const key of allKeys) {
+        const keywords = await Utils.Tools.getKeyWords(key) ?? []
+        keyToKeywordsMap.set(key, keywords)
       }
 
+      // 2. 搜索匹配的 keywords（扁平化所有 keywords 进行搜索）
+      const allKeywords = Array.from(keyToKeywordsMap.values()).flat()
       const lowerCaseKeyword = keyword.toLowerCase()
-      const results = allKeywords.filter(kw => kw.toLowerCase().includes(lowerCaseKeyword))
+      const matchedKeywords = allKeywords.filter(kw => 
+        kw.toLowerCase().includes(lowerCaseKeyword)
+      )
 
-      if (results.length === 0) {
+      if (matchedKeywords.length === 0) {
         await e.reply(`未找到与 "${keyword}" 相关的表情`, true)
         return true
       }
 
-      const uniqueResults = [ ...new Set(results) ].sort()
+      // 3. 按 key 分组，并合并同一 key 的 keywords
+      const resultMap = new Map()
+      for (const kw of matchedKeywords) {
+        for (const [key, keywords] of keyToKeywordsMap.entries()) {
+          if (keywords.includes(kw)) {
+            if (!resultMap.has(key)) {
+              resultMap.set(key, [])
+            }
+            resultMap.get(key).push(kw)
+          }
+        }
+      }
 
+      // 4. 格式化输出：合并同一 key 的 keywords
+      const formattedResults = []
+      for (const [key, keywords] of resultMap.entries()) {
+        formattedResults.push(keywords.join(' / '))
+      }
+
+      // 去重 + 排序
+      const uniqueResults = [...new Set(formattedResults)].sort()
+
+      // 5. 生成回复消息
       const replyMessage = uniqueResults
         .map((kw, index) => `${index + 1}. ${kw}`)
         .join('\n')
 
       await e.reply(replyMessage, true)
       return true
+      // === 修改部分结束 ===
 
     } catch (error) {
       logger.error(`[${Version.Plugin_AliasName}] 搜索表情失败: ${error}`)

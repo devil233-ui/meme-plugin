@@ -73,13 +73,13 @@ export class meme extends plugin {
   }
 
   async meme (e) {
-    e.group.setReaction?.(e.seq, 66)
+    e.group?.setReaction?.(e.seq, 66)
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(e, memeRegExp, Utils.Tools.getKey)
   }
 
   async preset (e) {
-    e.group.setReaction?.(e.seq, 66)
+    e.group?.setReaction?.(e.seq, 66)
     // 直接使用初始化完成的正则
     return this.validatePrepareMeme(
       e,
@@ -123,6 +123,9 @@ export class meme extends plugin {
       logger.info(
         `[清语表情] 该表情 "${matchedKeyword}" 在禁用列表中，跳过生成`
       )
+    //   await e.reply(
+    //     `[清语表情] "${matchedKeyword}" 已被拉黑，如确定为误判请联系主人解除`
+    //   )
       return false
     }
 
