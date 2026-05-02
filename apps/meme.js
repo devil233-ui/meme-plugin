@@ -118,7 +118,7 @@ export class meme extends plugin {
     /* 黑名单检查 */
     if (
       Config.access.blackListEnable &&
-      (await Utils.Tools.isBlacklisted(matchedKeyword))
+      (await Utils.Tools.isBlacklisted(matchedKeyword) || await Utils.Tools.isBlacklisted(memeKey))
     ) {
       logger.info(
         `[清语表情] 该表情 "${matchedKeyword}" 在禁用列表中，跳过生成`
